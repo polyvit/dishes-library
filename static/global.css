@@ -1,0 +1,22 @@
+:root {
+  --black: black;
+  --white: #fafafa;
+  --gray: #dedede;
+}
+* {
+  box-sizing: border-box;
+}
+a,
+a:visited {
+  color: var(--black);
+  text-decoration: none;
+}
+body {
+  font-family: "Open sans", sans-serif;
+  color: var(--black);
+}
+#root {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px;
+}
