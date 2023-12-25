@@ -1,0 +1,35 @@
+.search {
+  display: flex;
+  gap: 11px;
+  margin-bottom: 30px;
+}
+.search__wrapper {
+  flex: 1;
+  position: relative;
+}
+.search__wrapper img {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+.search__input {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--gray);
+  padding-left: 50px;
+  color: #252525;
+  flex: 1;
+}
+.search__input::placeholder {
+  color: #444444;
+}
+.search button {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--black);
+  cursor: pointer;
+}
