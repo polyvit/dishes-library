@@ -15,15 +15,18 @@ export class CardsList extends Wrapper {
       `;
       return this.el;
     }
-    this.el.classList.add("cards_list");
     this.el.innerHTML = `
-      <h3>Найдено книг - ${this.state.numFound}</h3>
+      <h3>Начните поиск</h3>
     `;
+    this.el.classList.add("cards_list");
     const listEl = document.createElement("div");
     listEl.classList.add("cards_grid");
     if (this.state.list.length) {
-      for (const book of this.state.list) {
-        listEl.append(new Card(this.appState, book).render());
+      this.el.innerHTML = `
+        <h3>Найдено позиций - ${this.state.totalMenuItems}</h3>
+      `;
+      for (const item of this.state.list) {
+        listEl.append(new Card(this.appState, item).render());
       }
     }
     this.el.append(listEl);

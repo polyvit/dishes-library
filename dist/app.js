@@ -1040,7 +1040,7 @@
       <div class="menu">
         <a class="menu__item" href="#">
           <img src="/static/search.svg" alt="search-icon"/>
-          Поиск книг
+          Поиск блюд
         </a>
         <a class="menu__item" href="#favorites">
           <img src="/static/favorites.svg" alt="mark-icon"/>
@@ -1075,7 +1075,7 @@
         <input 
           type="text" 
           class="search__input" 
-          placeholder="Найти книгу или автора...."
+          placeholder="Поиск по меню...."
           value="${this.state.searchQuery ? this.state.searchQuery : ""}"
         />
       </div>
@@ -1113,29 +1113,24 @@
 
     render() {
       this.el.classList.add("card");
-      const existedInFavourites = this.appState.favourites.find((book) => {
-        return book.key === this.cardState.key;
+      const existedInFavourites = this.appState.favourites.find((item) => {
+        return item.id === this.cardState.id;
       });
 
       this.el.innerHTML = `
       <div class="card__image">
-        <img alt="Изображение книги" src="https://dummyimage.com/180x144/666666/fff.jpg&text=No+photo"/>
+        <img alt="Изображение" src="${this.cardState.image}"/>
       </div>
       <div class="card__info">
         <div class="card__header">
-          <div class="card__tag">
-            ${
-              this.cardState.subject ? this.cardState.subject[0] : "Отсутствует"
-            }
-          </div>
           <div class="card__title">
             ${this.cardState.title}
           </div>
           <div class="card__author">
             ${
-              this.cardState.author_name
-                ? this.cardState.author_name[0]
-                : "Автор не известен"
+              this.cardState.restaurantChain
+                ? this.cardState.restaurantChain
+                : "Отсутствует"
             }
           </div>
         </div>
@@ -1179,15 +1174,18 @@
       `;
         return this.el;
       }
-      this.el.classList.add("cards_list");
       this.el.innerHTML = `
-      <h3>Найдено книг - ${this.state.numFound}</h3>
+      <h3>Начните поиск</h3>
     `;
+      this.el.classList.add("cards_list");
       const listEl = document.createElement("div");
       listEl.classList.add("cards_grid");
       if (this.state.list.length) {
-        for (const book of this.state.list) {
-          listEl.append(new Card(this.appState, book).render());
+        this.el.innerHTML = `
+        <h3>Найдено позиций - ${this.state.totalMenuItems}</h3>
+      `;
+        for (const item of this.state.list) {
+          listEl.append(new Card(this.appState, item).render());
         }
       }
       this.el.append(listEl);
@@ -1198,7 +1196,7 @@
   class MainView extends AbstractView {
     state = {
       list: [],
-      numFound: 0,
+      totalMenuItems: 0,
       loading: false,
       searchQuery: undefined,
       offset: 0,
@@ -1206,7 +1204,7 @@
 
     constructor(appState) {
       super();
-      this.setTitle("Books search");
+      this.setTitle("Menu items search");
       this.appState = appState;
       this.appState = onChange(this.appState, this.appStateHook.bind(this));
       this.state = onChange(this.state, this.stateHook.bind(this));
@@ -1224,9 +1222,9 @@
           this.state.searchQuery,
           this.state.offset
         );
-        this.state.numFound = data.numFound;
+        this.state.totalMenuItems = data.totalMenuItems;
         this.state.loading = false;
-        this.state.list = data.docs;
+        this.state.list = data.menuItems;
       }
       if (path === "list" || path === "loading") {
         this.render();
@@ -1235,7 +1233,10 @@
 
     async loadList(q, offset) {
       const res = await fetch(
-        `https://openlibrary.org/search.json?q=${q}&offset=${offset}&limit=10`
+        `https://api.spoonacular.com/food/menuItems/search?apiKey=70f6b06784bd4dd88b721c489a0d099c&query=${q}&offset=${offset}`,
+        {
+          "Content-Type": "application/json",
+        }
       );
       return res.json();
     }
@@ -1262,13 +1263,13 @@
 
     render() {
       this.el.innerHTML = `
-      <h3>Книг в избранном - ${this.appState.favourites.length}</h3>
+      <h3>Блюд в избранном - ${this.appState.favourites.length}</h3>
     `;
       const listEl = document.createElement("div");
       listEl.classList.add("favs_grid");
       if (this.appState.favourites.length) {
-        for (const book of this.appState.favourites) {
-          listEl.append(new Card(this.appState, book).render());
+        for (const item of this.appState.favourites) {
+          listEl.append(new Card(this.appState, item).render());
         }
       }
       this.el.append(listEl);

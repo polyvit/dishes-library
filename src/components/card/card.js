@@ -19,29 +19,24 @@ export class Card extends Wrapper {
 
   render() {
     this.el.classList.add("card");
-    const existedInFavourites = this.appState.favourites.find((book) => {
-      return book.key === this.cardState.key;
+    const existedInFavourites = this.appState.favourites.find((item) => {
+      return item.id === this.cardState.id;
     });
 
     this.el.innerHTML = `
       <div class="card__image">
-        <img alt="Изображение книги" src="https://dummyimage.com/180x144/666666/fff.jpg&text=No+photo"/>
+        <img alt="Изображение" src="${this.cardState.image}"/>
       </div>
       <div class="card__info">
         <div class="card__header">
-          <div class="card__tag">
-            ${
-              this.cardState.subject ? this.cardState.subject[0] : "Отсутствует"
-            }
-          </div>
           <div class="card__title">
             ${this.cardState.title}
           </div>
           <div class="card__author">
             ${
-              this.cardState.author_name
-                ? this.cardState.author_name[0]
-                : "Автор не известен"
+              this.cardState.restaurantChain
+                ? this.cardState.restaurantChain
+                : "Отсутствует"
             }
           </div>
         </div>

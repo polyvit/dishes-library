@@ -21,7 +21,7 @@ export class Search extends Wrapper {
         <input 
           type="text" 
           class="search__input" 
-          placeholder="Найти книгу или автора...."
+          placeholder="Поиск по меню...."
           value="${this.state.searchQuery ? this.state.searchQuery : ""}"
         />
       </div>

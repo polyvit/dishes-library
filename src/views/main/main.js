@@ -7,7 +7,7 @@ import { CardsList } from "../../components/cards-list/cards-list.js";
 export class MainView extends AbstractView {
   state = {
     list: [],
-    numFound: 0,
+    totalMenuItems: 0,
     loading: false,
     searchQuery: undefined,
     offset: 0,
@@ -15,7 +15,7 @@ export class MainView extends AbstractView {
 
   constructor(appState) {
     super();
-    this.setTitle("Books search");
+    this.setTitle("Menu items search");
     this.appState = appState;
     this.appState = onChange(this.appState, this.appStateHook.bind(this));
     this.state = onChange(this.state, this.stateHook.bind(this));
@@ -33,9 +33,9 @@ export class MainView extends AbstractView {
         this.state.searchQuery,
         this.state.offset
       );
-      this.state.numFound = data.numFound;
+      this.state.totalMenuItems = data.totalMenuItems;
       this.state.loading = false;
-      this.state.list = data.docs;
+      this.state.list = data.menuItems;
     }
     if (path === "list" || path === "loading") {
       this.render();
@@ -44,7 +44,10 @@ export class MainView extends AbstractView {
 
   async loadList(q, offset) {
     const res = await fetch(
-      `https://openlibrary.org/search.json?q=${q}&offset=${offset}&limit=10`
+      `https://api.spoonacular.com/food/menuItems/search?apiKey=70f6b06784bd4dd88b721c489a0d099c&query=${q}&offset=${offset}`,
+      {
+        "Content-Type": "application/json",
+      }
     );
     return res.json();
   }
