@@ -1102,13 +1102,19 @@
       this.cardState = cardState;
     }
 
-    #addToFav() {
+    #addToFav = (e) => {
+      e.preventDefault();
       this.appState.favourites.push(this.cardState);
-    }
+    };
+
     #deleteFromFav() {
       this.appState.favourites = this.appState.favourites.filter((book) => {
         book.key !== this.cardState.key;
       });
+    }
+    #searchDetails() {
+      this.appState.itemId = this.cardState.id;
+      location.replace(`${location.href}item`);
     }
 
     render() {
@@ -1116,6 +1122,7 @@
       const existedInFavourites = this.appState.favourites.find((item) => {
         return item.id === this.cardState.id;
       });
+      this.el.addEventListener("click", this.#searchDetails.bind(this));
 
       this.el.innerHTML = `
       <div class="card__image">
@@ -1154,7 +1161,7 @@
       } else {
         this.el
           .querySelector(".button__add")
-          .addEventListener("click", this.#addToFav.bind(this));
+          .addEventListener("click", this.#addToFav);
       }
 
       return this.el;
@@ -1294,8 +1301,91 @@
     render() {
       const main = document.createElement("div");
       this.app.innerHTML = "";
-      // main.innerHTML = `<h1>Fav page</h1>`;
       this.app.append(new FavsList(this.appState).render());
+      this.app.append(main);
+      this.renderHeader();
+    }
+    renderHeader() {
+      const header = new Header(this.appState).render();
+      this.app.prepend(header);
+    }
+  }
+
+  class ItemInfo extends Wrapper {
+    constructor(appState, localState) {
+      super();
+      this.appState = appState;
+      this.state = localState;
+    }
+
+    render() {
+      if (this.state.loading) {
+        this.el.innerHTML = `
+        <div class="cards_list__loader">Идет загрузка...</div>
+      `;
+        return this.el;
+      }
+      if (this.state.item.title) {
+        this.el.innerHTML = `
+        <div class="item__info">
+          <img src=${this.state.item.image} alt="Image"/>
+          <div>
+            <h3>${this.state.item.title}</h3>
+            <p>Restaurant chain: <b>${this.state.item.restaurantChain}</b></p>
+          </div>
+        </div>
+      `;
+      }
+      return this.el;
+    }
+  }
+
+  class ItemView extends AbstractView {
+    state = {
+      item: {},
+      loading: false,
+    };
+
+    constructor(appState) {
+      super();
+      this.setTitle("Item info");
+      this.appState = appState;
+      this.appState = onChange(this.appState, this.appStateHook.bind(this));
+      this.state = onChange(this.state, this.stateHook.bind(this));
+      if (this.appState.itemId) {
+        this.loadDetails(this.appState.itemId);
+      }
+    }
+
+    appStateHook(path) {
+      console.log("path", path);
+    }
+
+    stateHook(path) {
+      if (path === "item" || path === "loading") {
+        this.render();
+      }
+    }
+
+    async loadDetails(id) {
+      this.state.loading = true;
+      const res = await fetch(
+        `https://api.spoonacular.com/food/menuItems/${id}?apiKey=70f6b06784bd4dd88b721c489a0d099c`,
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      this.state.loading = false;
+      this.state.item = await res.json();
+      // console.log(await res.json());
+      // return res.json();
+    }
+
+    render() {
+      console.log("render method", this.state.item?.title);
+      const main = document.createElement("div");
+      this.app.innerHTML = "";
+      main.append(new ItemInfo(this.appState, this.state).render());
       this.app.append(main);
       this.renderHeader();
     }
@@ -1309,10 +1399,12 @@
     routes = [
       { path: "", view: MainView },
       { path: "#favorites", view: FavView },
+      { path: "#item", view: ItemView },
     ];
 
     appState = {
       favourites: [],
+      itemId: 0,
     };
 
     constructor() {

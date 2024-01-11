@@ -8,13 +8,19 @@ export class Card extends Wrapper {
     this.cardState = cardState;
   }
 
-  #addToFav() {
+  #addToFav = (e) => {
+    e.preventDefault();
     this.appState.favourites.push(this.cardState);
-  }
+  };
+
   #deleteFromFav() {
     this.appState.favourites = this.appState.favourites.filter((book) => {
       book.key !== this.cardState.key;
     });
+  }
+  #searchDetails() {
+    this.appState.itemId = this.cardState.id;
+    location.replace(`${location.href}item`);
   }
 
   render() {
@@ -22,6 +28,7 @@ export class Card extends Wrapper {
     const existedInFavourites = this.appState.favourites.find((item) => {
       return item.id === this.cardState.id;
     });
+    this.el.addEventListener("click", this.#searchDetails.bind(this));
 
     this.el.innerHTML = `
       <div class="card__image">
@@ -60,7 +67,7 @@ export class Card extends Wrapper {
     } else {
       this.el
         .querySelector(".button__add")
-        .addEventListener("click", this.#addToFav.bind(this));
+        .addEventListener("click", this.#addToFav);
     }
 
     return this.el;

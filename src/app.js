@@ -1,15 +1,18 @@
 import { MainView } from "./views/main/main.js";
 import { FavView } from "./views/favs/favourite.js";
+import { ItemView } from "./views/item/item.js";
 import "./app.css";
 
 class App {
   routes = [
     { path: "", view: MainView },
     { path: "#favorites", view: FavView },
+    { path: "#item", view: ItemView },
   ];
 
   appState = {
     favourites: [],
+    itemId: 0,
   };
 
   constructor() {

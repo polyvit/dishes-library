@@ -20,7 +20,6 @@ export class FavView extends AbstractView {
   render() {
     const main = document.createElement("div");
     this.app.innerHTML = "";
-    // main.innerHTML = `<h1>Fav page</h1>`;
     this.app.append(new FavsList(this.appState).render());
     this.app.append(main);
     this.renderHeader();
