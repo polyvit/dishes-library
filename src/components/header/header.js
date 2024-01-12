@@ -11,7 +11,7 @@ export class Header extends Wrapper {
     this.el.classList.add("header");
     this.el.innerHTML = `
       <div>
-        <a href="#">
+        <a href="/">
           <img src="/static/Logo.svg" alt="Logo"/>
         </a>
       </div>

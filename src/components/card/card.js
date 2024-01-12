@@ -20,7 +20,11 @@ export class Card extends Wrapper {
   }
   #searchDetails() {
     this.appState.itemId = this.cardState.id;
-    location.replace(`${location.href}item`);
+    if (!location.hash) {
+      location.replace(`${location.href}#item`);
+    } else {
+      location.replace(`${location.href.split("#")[0]}#item`);
+    }
   }
 
   render() {

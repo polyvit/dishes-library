@@ -1033,7 +1033,7 @@
       this.el.classList.add("header");
       this.el.innerHTML = `
       <div>
-        <a href="#">
+        <a href="/">
           <img src="/static/Logo.svg" alt="Logo"/>
         </a>
       </div>
@@ -1114,7 +1114,11 @@
     }
     #searchDetails() {
       this.appState.itemId = this.cardState.id;
-      location.replace(`${location.href}item`);
+      if (!location.hash) {
+        location.replace(`${location.href}#item`);
+      } else {
+        location.replace(`${location.href.split("#")[0]}#item`);
+      }
     }
 
     render() {
