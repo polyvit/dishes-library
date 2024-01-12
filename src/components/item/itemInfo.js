@@ -22,8 +22,28 @@ export class ItemInfo extends Wrapper {
           <div>
             <h3>${this.state.item.title}</h3>
             <p>Restaurant chain: <b>${this.state.item.restaurantChain}</b></p>
+            <button class="item__button">В избранное</button>
           </div>
         </div>
+        <div>
+          <table>
+            <tr>
+              ${this.state.item.nutrition.nutrients.map((n) => {
+                return `
+                  <th>${n.name}</th>
+                `;
+              })}
+            </tr>
+            <tr>
+              ${this.state.item.nutrition.nutrients.map((n) => {
+                return `
+                  <td>${n.amount}</td>
+                `;
+              })}
+            </tr>
+          </table>
+        </div>
+        <div></div>
       `;
     }
     return this.el;

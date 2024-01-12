@@ -21,7 +21,6 @@ export class ItemView extends AbstractView {
   }
 
   appStateHook(path) {
-    console.log("path", path);
     if (path === "itemId") {
       // this.loadDetails(this.appState.itemId);
     }
@@ -48,7 +47,6 @@ export class ItemView extends AbstractView {
   }
 
   render() {
-    console.log("render method", this.state.item?.title);
     const main = document.createElement("div");
     this.app.innerHTML = "";
     main.append(new ItemInfo(this.appState, this.state).render());

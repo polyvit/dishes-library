@@ -9,7 +9,7 @@ export class Card extends Wrapper {
   }
 
   #addToFav = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     this.appState.favourites.push(this.cardState);
   };
 

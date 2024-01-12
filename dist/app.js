@@ -1103,7 +1103,7 @@
     }
 
     #addToFav = (e) => {
-      e.preventDefault();
+      e.stopPropagation();
       this.appState.favourites.push(this.cardState);
     };
 
@@ -1332,8 +1332,28 @@
           <div>
             <h3>${this.state.item.title}</h3>
             <p>Restaurant chain: <b>${this.state.item.restaurantChain}</b></p>
+            <button class="item__button">В избранное</button>
           </div>
         </div>
+        <div>
+          <table>
+            <tr>
+              ${this.state.item.nutrition.nutrients.map((n) => {
+                return `
+                  <th>${n.name}</th>
+                `;
+              })}
+            </tr>
+            <tr>
+              ${this.state.item.nutrition.nutrients.map((n) => {
+                return `
+                  <td>${n.amount}</td>
+                `;
+              })}
+            </tr>
+          </table>
+        </div>
+        <div></div>
       `;
       }
       return this.el;
@@ -1358,7 +1378,6 @@
     }
 
     appStateHook(path) {
-      console.log("path", path);
     }
 
     stateHook(path) {
@@ -1382,7 +1401,6 @@
     }
 
     render() {
-      console.log("render method", this.state.item?.title);
       const main = document.createElement("div");
       this.app.innerHTML = "";
       main.append(new ItemInfo(this.appState, this.state).render());

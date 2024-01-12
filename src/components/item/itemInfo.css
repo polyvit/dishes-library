@@ -1,3 +1,22 @@
 .item__info {
   display: flex;
 }
+.item__button {
+  background-color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  color: white;
+}
+.item__button_active {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+}
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+th {
+  background-color: darkgrey;
+}
