@@ -1,0 +1,15 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pagination img {
+  width: 20px;
+  height: 20px;
+}
+.pagination a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import { Wrapper } from "../../common/wrapper";
 import { Card } from "../card/card";
+import { Pagination } from "../pagination/pagination";
 import "./cards-list.css";
 
 export class CardsList extends Wrapper {
@@ -30,6 +31,9 @@ export class CardsList extends Wrapper {
       }
     }
     this.el.append(listEl);
+    if (this.state.list.length) {
+      this.el.append(new Pagination(this.state).render());
+    }
     return this.el;
   }
 }

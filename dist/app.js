@@ -1168,6 +1168,40 @@
     }
   }
 
+  class Pagination extends Wrapper {
+    constructor(mainViewState) {
+      super();
+      this.state = mainViewState;
+    }
+
+    #changeOffset = (e) => {
+      if (e.target.dataset.arrow === "plus") {
+        this.state.offset += 1;
+      } else {
+        this.state.offset -= 1;
+      }
+    };
+
+    render() {
+      this.el.innerHTML = "";
+      this.el.classList.add("pagination");
+      this.el.innerHTML = `
+      <a data-arrow="minus">
+        <img src="/static/arrow_left.svg" alt="arrow"/>
+        Previous page
+      </a>
+      <a data-arrow="plus">
+        Next page
+        <img src="/static/right_arrow.svg" alt="arrow"/>
+      </a>
+    `;
+      this.el
+        .querySelectorAll("a")
+        .forEach((a) => a.addEventListener("click", this.#changeOffset));
+      return this.el;
+    }
+  }
+
   class CardsList extends Wrapper {
     constructor(appState, mainViewState) {
       super();
@@ -1196,6 +1230,9 @@
         }
       }
       this.el.append(listEl);
+      if (this.state.list.length) {
+        this.el.append(new Pagination(this.state).render());
+      }
       return this.el;
     }
   }
@@ -1223,7 +1260,7 @@
       }
     }
     async stateHook(path) {
-      if (path === "searchQuery") {
+      if (path === "searchQuery" || path === "offset") {
         this.state.loading = true;
         const data = await this.loadList(
           this.state.searchQuery,

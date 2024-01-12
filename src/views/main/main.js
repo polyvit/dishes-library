@@ -27,7 +27,7 @@ export class MainView extends AbstractView {
     }
   }
   async stateHook(path) {
-    if (path === "searchQuery") {
+    if (path === "searchQuery" || path === "offset") {
       this.state.loading = true;
       const data = await this.loadList(
         this.state.searchQuery,
