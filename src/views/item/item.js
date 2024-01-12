@@ -21,8 +21,8 @@ export class ItemView extends AbstractView {
   }
 
   appStateHook(path) {
-    if (path === "itemId") {
-      // this.loadDetails(this.appState.itemId);
+    if (path === "favourites") {
+      this.render();
     }
   }
 
@@ -42,8 +42,6 @@ export class ItemView extends AbstractView {
     );
     this.state.loading = false;
     this.state.item = await res.json();
-    // console.log(await res.json());
-    // return res.json();
   }
 
   render() {
